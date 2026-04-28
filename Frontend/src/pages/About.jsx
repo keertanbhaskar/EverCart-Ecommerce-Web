@@ -1,69 +1,46 @@
-import React from 'react'
-import Title from '../components/Title'
-import { assets } from '../assets/assets'
-import NewsletterBox from '../components/NewsletterBox'
+import React from 'react';
+import Title from '../components/Title';
+import { assets } from '../assets/assets';
+import NewsletterBox from '../components/NewsletterBox';
 
 const About = () => {
   return (
-    <div>
-      <div className="text-2xl text-center pt-8 border-t">
+    <div className="border-t border-gray-100">
+      <div className="text-center pt-12 pb-4">
         <Title text1={"ABOUT"} text2={"US"} />
       </div>
 
-      <div className="my-10 flex flex-col md:flex-row gap-16 ">
-        <img className="w-full md:max-w-112.5" src={assets.about_img} alt="" />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing. Lorem ipsum
-            dolor sit amet consectetur.
-          </p>
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem,
-            ipsum dolor sit amet consectetur adipisicing elit.{" "}
-          </p>
-          <b className="text-gray-800">Our Mission</b>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-            perspiciatis dolorem in praesentium illo cupiditate quidem quas
-            architecto accusantium? Iusto repellendus exercitationem corrupti
-            fugit sed sunt deserunt mollitia laborum debitis! Veniam tenetur,
-            quo quidem aperiam enim odit dignissimos rerum sequi ullam? Modi
-            officia commodi vero necessitatibus vel illo optio repellat tenetur,
-            tempore eaque amet odit, deserunt iste aut laudantium sequi.
-          </p>
+      <div className="flex flex-col md:flex-row gap-12 my-10 items-center">
+        <img src={assets.about_img} alt="about" className="w-full md:max-w-sm rounded-2xl object-cover" />
+        <div className="flex flex-col gap-5 text-gray-600 text-sm leading-relaxed">
+          <p>We started EverCart with a simple belief — great fashion should be accessible to everyone. From everyday basics to statement pieces, we curate collections that fit your lifestyle.</p>
+          <p>Our team works directly with manufacturers to bring you quality clothing at honest prices, with a commitment to sustainable and ethical practices.</p>
+          <div className="bg-stone-50 rounded-2xl p-6 mt-2">
+            <p className="font-semibold text-gray-900 mb-2">Our Mission</p>
+            <p>To make modern, quality fashion accessible to everyone — delivered with care, backed by trust, and built to last.</p>
+          </div>
         </div>
-      </div>
-      <div className="text-4xl py-4">
-        <Title text1={"WHY"} text2={"CHOOSE US"} />
       </div>
 
-      <div className="flex flex-col md:flex-row text-sm mb-20">
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Quality Assurance: </b>
-          <p className='text-gray-600'>
-            We meticulously select and vet each product to ensure it meets our
-            stringent
-          </p>
-        </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Convenience: </b>
-          <p className='text-gray-600'>
-            With our user-friendly interface and hassle-free ordering process,
-            shopping
-          </p>
-        </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
-          <b>Exceptional Customer service </b>
-          <p className='text-gray-600'>
-            We provide exceptional customer service to ensure a smooth and
-            satisfying shopping experience. Our support team is always ready to
-            assist you with quick and reliable solutions.
-          </p>
-        </div>
+      <div className="mb-6">
+        <Title text1={"WHY"} text2={"CHOOSE US"} />
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+        {[
+          { title: "Quality Assurance", desc: "Every product is carefully selected and quality-checked before it reaches you." },
+          { title: "Convenience", desc: "A seamless shopping experience from browsing to delivery, designed around you." },
+          { title: "Customer Support", desc: "Our support team is available 24/7 to help with any questions or concerns." },
+        ].map((item) => (
+          <div key={item.title} className="bg-stone-50 rounded-2xl p-6 border border-gray-100">
+            <p className="font-semibold text-gray-900 mb-2 text-sm">{item.title}</p>
+            <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
       <NewsletterBox />
     </div>
   );
-}
+};
 
-export default About
+export default About;

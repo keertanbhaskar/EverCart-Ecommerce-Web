@@ -1,35 +1,40 @@
 import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Orders from "./pages/Orders";
 import Login from "./components/Login";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
+export const currency = "₹";
+
 const App = () => {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-100">
+      <ToastContainer position="top-right" />
       {token === "" ? (
-        <Login />
+        <Login setToken={setToken} />
       ) : (
-        <>
-          <Navbar />
-          <hr />
-          <div className="flex w-full">
+        <div className="flex flex-col min-h-screen">
+          <Navbar setToken={setToken} />
+          <div className="flex flex-1">
             <Sidebar />
-            <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
+            <main className="flex-1 p-6 overflow-auto">
               <Routes>
-                <Route path="/add" element={<Add />} />
-                <Route path="/list" element={<List />} />
-                <Route path="/orders" element={<Orders />} />
+                <Route path="/" element={<Navigate to="/orders" />} />
+                <Route path="/add" element={<Add token={token} />} />
+                <Route path="/list" element={<List token={token} />} />
+                <Route path="/orders" element={<Orders token={token} />} />
               </Routes>
-            </div>
+            </main>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -5,127 +5,110 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCount } = useContext(ShopContext);
+  const { setShowSearch, getCartCount, token, setToken, navigate } = useContext(ShopContext);
+
+  const logout = () => {
+    navigate("/login");
+    localStorage.removeItem("token");
+    setToken("");
+  };
 
   return (
-    <div className="flex items-center justify-between py-5 font-medium ">
+    <nav className="flex items-center justify-between py-4 border-b border-gray-100">
       <Link to="/">
-        <img src={assets.logo} className="w-30" alt="" />
+        <img src={assets.logo} className="w-28" alt="logo" />
       </Link>
 
-      <ul className="hidden sm:flex gap-5 text-sm text-gray-500">
-        <NavLink to={"/"} className="flex flex-col items-center gap-1">
-          <p>HOME</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
-        </NavLink>
-
-        <NavLink
-          to={"/collection"}
-          className="flex flex-col items-center gap-1"
-        >
-          <p>COLLECTION</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
-        </NavLink>
-
-        <NavLink to={"/about"} className="flex flex-col items-center gap-1">
-          <p>ABOUT</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
-        </NavLink>
-
-        <NavLink to={"/contact"} className="flex flex-col items-center gap-1">
-          <p>CONTACT</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
-        </NavLink>
+      {/* Desktop nav */}
+      <ul className="hidden sm:flex gap-8 text-sm font-medium text-gray-600">
+        {[
+          { to: "/", label: "HOME" },
+          { to: "/collection", label: "COLLECTION" },
+          { to: "/about", label: "ABOUT" },
+          { to: "/contact", label: "CONTACT" },
+        ].map(({ to, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `flex flex-col items-center gap-1 hover:text-gray-900 transition ${isActive ? "text-gray-900" : ""}`
+            }
+          >
+            <p>{label}</p>
+            <hr className="w-full border-none h-[2px] bg-gray-900 hidden" />
+          </NavLink>
+        ))}
       </ul>
 
-      <div className="flex items-center gap-6">
-        <img
-          onClick={() => setShowSearch(true)}
-          src={assets.search_icon}
-          className="w-5 cursor-pointer"
-          alt=""
-        />
+      {/* Icons */}
+      <div className="flex items-center gap-5">
+        <button onClick={() => setShowSearch(true)} className="text-gray-600 hover:text-gray-900 transition">
+          <img src={assets.search_icon} className="w-5" alt="search" />
+        </button>
 
+        {/* Profile dropdown */}
         <div className="group relative">
-          <Link to="/login">
-            <img
-              className="w-5 cursor-pointer"
-              src={assets.profile_icon}
-              alt=""
-            />
+          <Link to={token ? "#" : "/login"}>
+            <img src={assets.profile_icon} className="w-5 cursor-pointer" alt="profile" />
           </Link>
-
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
-              <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Order</p>
-              <p className="cursor-pointer hover:text-black">Logout</p>
+          {token && (
+            <div className="group-hover:block hidden absolute right-0 pt-3 z-50">
+              <div className="bg-white border border-gray-100 rounded-xl shadow-lg py-2 w-40 text-sm text-gray-600">
+                <p className="px-4 py-2 hover:bg-gray-50 hover:text-gray-900 cursor-pointer rounded-lg mx-1 transition">My Profile</p>
+                <p onClick={() => navigate("/orders")} className="px-4 py-2 hover:bg-gray-50 hover:text-gray-900 cursor-pointer rounded-lg mx-1 transition">My Orders</p>
+                <hr className="my-1 border-gray-100" />
+                <p onClick={logout} className="px-4 py-2 hover:bg-red-50 hover:text-red-600 cursor-pointer rounded-lg mx-1 transition">Logout</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
+        {/* Cart */}
         <Link to="/cart" className="relative">
-          <img src={assets.cart_icon} alt="" className="w-5 min-w-5" />
-          <p className="absolute -right-1 -bottom-1 w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
-            {getCartCount()}
-          </p>
+          <img src={assets.cart_icon} className="w-5" alt="cart" />
+          {getCartCount() > 0 && (
+            <span className="absolute -top-2 -right-2 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              {getCartCount()}
+            </span>
+          )}
         </Link>
 
-        <img
-          onClick={() => setVisible(true)}
-          src={assets.menu_icon}
-          alt=""
-          className="w-5 cursor-pointer sm:hidden"
-        />
+        {/* Mobile menu */}
+        <button onClick={() => setVisible(true)} className="sm:hidden text-gray-600">
+          <img src={assets.menu_icon} className="w-5" alt="menu" />
+        </button>
       </div>
 
-      {/* Sidebar menu for small screen */}
-      <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? "w-full" : "w-0"}`}
-      >
-        <div className="flex flex-col text-gray-600">
-          <div
-            onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-3 cursor-pointer"
-          >
-            <img src={assets.dropdown_icon} alt="" className="h-4 rotate-180" />
-            <p>Back</p>
+      {/* Mobile drawer */}
+      <div className={`fixed inset-0 z-50 transition-all duration-300 ${visible ? "visible" : "invisible"}`}>
+        <div className={`absolute inset-0 bg-black/30 transition-opacity ${visible ? "opacity-100" : "opacity-0"}`} onClick={() => setVisible(false)} />
+        <div className={`absolute top-0 right-0 h-full w-72 bg-white shadow-xl transition-transform duration-300 ${visible ? "translate-x-0" : "translate-x-full"}`}>
+          <div className="flex items-center justify-between p-5 border-b border-gray-100">
+            <span className="font-semibold text-gray-900">Menu</span>
+            <button onClick={() => setVisible(false)} className="text-gray-400 hover:text-gray-600">
+              <img src={assets.cross_icon} className="w-4" alt="close" />
+            </button>
           </div>
-
-          <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
-            to="/"
-          >
-            HOME
-          </NavLink>
-
-          <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
-            to="/collection"
-          >
-            COLLECTION
-          </NavLink>
-
-          <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
-            to="/about"
-          >
-            ABOUT
-          </NavLink>
-
-          <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
-            to="/contact"
-          >
-            CONTACT
-          </NavLink>
+          <div className="flex flex-col p-4 gap-1">
+            {[
+              { to: "/", label: "Home" },
+              { to: "/collection", label: "Collection" },
+              { to: "/about", label: "About" },
+              { to: "/contact", label: "Contact" },
+            ].map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={() => setVisible(false)}
+                className="px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition"
+              >
+                {label}
+              </NavLink>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -4,34 +4,26 @@ import Title from "./Title";
 
 const CartTotal = () => {
   const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
+  const subtotal = getCartAmount();
+
   return (
-    <div className="w-full sm:w-96 ml-auto">
-      {" "}
-      {/* small fix here */}
-      <div className="text-2xl">
-        <Title text1={"CART"} text2={"TOTALS"} />
+    <div className="bg-stone-50 rounded-2xl p-6">
+      <div className="text-xl mb-4">
+        <Title text1={"ORDER"} text2={"SUMMARY"} />
       </div>
-      <div className="flex flex-col gap-2 mt-2 text-sm">
-        <div className="flex justify-between">
+      <div className="flex flex-col gap-3 text-sm">
+        <div className="flex justify-between text-gray-600">
           <p>Subtotal</p>
-          <p>
-            {currency} {getCartAmount()}.00
-          </p>
+          <p>{currency}{subtotal}.00</p>
         </div>
-        <hr />
-        <div className="flex justify-between">
-          <p>Shipping Fee</p>
-          <p>
-            {currency} {delivery_fee}.00
-          </p>
+        <div className="flex justify-between text-gray-600">
+          <p>Shipping</p>
+          <p>{subtotal === 0 ? "—" : `${currency}${delivery_fee}.00`}</p>
         </div>
-        <hr />
-        <div className="flex justify-between">
-          <b>Total</b>
-          <b>
-            {currency}
-            {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}.00
-          </b>
+        <hr className="border-gray-200 my-1" />
+        <div className="flex justify-between font-semibold text-gray-900 text-base">
+          <p>Total</p>
+          <p>{currency}{subtotal === 0 ? 0 : subtotal + delivery_fee}.00</p>
         </div>
       </div>
     </div>

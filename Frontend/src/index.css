@@ -1,31 +1,25 @@
-/* Google font FIRST */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Port+Lligat+Slab&family=Prata&display=swap');
-
-/* Then Tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* Then your CSS */
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
 a.active hr {
-  display: block;
+  display: block !important;
 }
 
- *{
-    font-family: 'Outfit', sans-serif;
-  }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #fafafa; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
 
-
-.port-lligat-slab-regular {
-  font-family: "Port Lligat Slab", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-::-webkit-scrollbar{
-  display: none;
-}
-
-@media(max-width:640px){
-  a.active{
-    background-color: #000;
-    color:white;
+@media (max-width: 640px) {
+  a.active {
+    background-color: #1a1a1a;
+    color: white;
   }
 }
