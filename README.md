@@ -171,6 +171,4 @@ Each app has a `.env.example` file — copy it to `.env` and fill in your values
 
 ---
 
-## License
 
-MIT
